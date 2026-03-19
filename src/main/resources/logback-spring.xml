@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" scanPeriod="60 seconds">
+    <!-- 引入 Spring Boot 默认的日志配置 -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    
+    <!-- 从 Spring 环境中获取应用名称 -->
+    <springProperty scope="context" name="appName" source="spring.application.name" defaultValue="unknown-app"/>
+    
+    <!-- 日志文件路径配置 -->
+    <!-- 默认路径符合阿里巴巴规范：/home/admin/应用名/logs/ -->
+    <!-- 可以通过 logging.file.path 属性在 Nacos 或本地配置中覆盖，例如 Windows 开发环境可配置为 ./logs -->
+    <springProperty scope="context" name="logPath" source="logging.file.path" defaultValue="/${appName}/logs"/>
+    
+    <!-- 日志文件名称 -->
+    <timestamp key="byDay" datePattern="yyyy-MM-dd"/>
+    <property name="LOG_FILE" value="${logPath}/${appName}.${byDay}.log"/>
+
+    <!-- 控制台 Appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 文件 Appender -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 正在记录的日志文件路径 -->
+        <file>${LOG_FILE}</file>
+        
+        <!-- 滚动策略：基于时间与大小 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 归档日志文件名格式：{logname}.{保存日期}.{索引}.log -->
+            <!-- 例如：myapp.log.2023-10-01.0 -->
+            <!-- 注意：必须包含 %i 和 %d -->
+            <fileNamePattern>${logPath}/${appName}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            
+            <!-- 单个文件最大大小 -->
+            <maxFileSize>50MB</maxFileSize>
+
+            <!-- 日志保留天数：至少 15 天 -->
+            <maxHistory>15</maxHistory>
+            
+            <!-- 可选：总大小限制，防止磁盘撑爆 -->
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+        
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 异步输出，提升性能 -->
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
+        <queueSize>512</queueSize>
+        <!-- 添加附加的appender,最多只能添加一个 -->
+        <appender-ref ref="FILE"/>
+    </appender>
+
+    <!-- 从 Nacos 获取日志级别配置 -->
+    <springProperty scope="context" name="rootLevel" source="logging.level.root" defaultValue="INFO"/>
+
+    <!-- 开发环境：控制台 + 文件 -->
+    <springProfile name="dev,local,test">
+        <root level="${rootLevel}">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="ASYNC_FILE"/>
+        </root>
+    </springProfile>
+
+    <!-- 生产环境：仅文件 -->
+    <springProfile name="prod">
+        <root level="${rootLevel}">
+            <appender-ref ref="ASYNC_FILE"/>
+        </root>
+    </springProfile>
+
+    <!-- 默认兜底配置（当没有匹配的 profile 时） -->
+    <springProfile name="!dev &amp; !local &amp; !test &amp; !prod">
+        <root level="${rootLevel}">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="ASYNC_FILE"/>
+        </root>
+    </springProfile>
+
+    <!-- 示例：针对特定包的日志配置，additivity=false 避免重复打印 -->
+    <!-- 如果需要在 Nacos 中配置特定包的日志级别，可以直接使用 logging.level.com.example=DEBUG -->
+    <!-- 下面是一个示例，如果需要单独输出某个包的日志到不同文件，可以这样配置 -->
+    <!-- 
+    <logger name="com.jiajian.dataplatform" level="INFO" additivity="false">
+        <appender-ref ref="ASYNC_FILE"/>
+    </logger> 
+    -->
+
+</configuration>

@@ -1,0 +1,50 @@
+server:
+  port: 8612
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  main:
+    allow-circular-references: true
+  application:
+    name: rikka-raymi-server
+  h2:
+    console:
+      enabled: false       # 启用 H2 控制台
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1  # 内存模式
+    # 注释1：文件模式，数据会保存在用户目录下的 game_companion_db.mv.db 文件中。
+    # 如果希望使用内存模式（应用重启数据丢失），可以替换为: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: root
+    password: 123456
+    druid:
+      # --- 连接池基础设置 ---
+      initial-size: 5 # 初始化连接数
+      min-idle: 5     # 最小空闲连接数
+      max-active: 20  # 最大活跃连接数
+      max-wait: 60000 # 获取连接时最大等待时间（毫秒）
+      validation-query: SELECT 1
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    auto-mapping-behavior: full
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      table-prefix: tbl_
+    banner: false
+  mapper-locations: classpath*:com/rikka/raymispring/mapper/**/*Mapper.xml
+  type-aliases-package: com.rikka.raymispring.domain
+
+logging:
+  config: classpath:logback-spring.xml
+  file:
+    path: ./logs
+  level:
+    root: INFO
+    com.baomidou.mybatisplus: INFO
+    org.apache.ibatis: INFO       # MyBatis 核心包
+    java.sql: INFO                # SQL 日志

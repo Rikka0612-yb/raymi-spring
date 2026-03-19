@@ -1,0 +1,70 @@
+server:
+  port: 8612
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  main:
+    allow-circular-references: true
+  application:
+    name: rikka-raymi-server
+  h2:
+    console:
+      enabled: true       # 启用 H2 控制台
+      path: /h2-console   # 控制台的访问路径，可自定义，默认即为 /h2-console
+  datasource:
+    url: jdbc:h2:~/rikka_raymi;AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;
+    # 注释1：文件模式，数据会保存在用户目录下的 game_companion_db.mv.db 文件中。
+    # 如果希望使用内存模式（应用重启数据丢失），可以替换为: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: root
+    password: 123456
+    druid:
+      # --- 连接池基础设置 ---
+      initial-size: 5 # 初始化连接数
+      min-idle: 5     # 最小空闲连接数
+      max-active: 20  # 最大活跃连接数
+      max-wait: 60000 # 获取连接时最大等待时间（毫秒）
+      validation-query: SELECT 1
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    auto-mapping-behavior: full
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      table-prefix: tbl_
+    banner: false
+  mapper-locations: classpath*:com/rikka/raymispring/mapper/**/*Mapper.xml
+  type-aliases-package: com.rikka.raymispring.domain
+
+logging:
+  config: classpath:logback-spring.xml
+  file:
+    path: ./logs
+  level:
+    root: INFO
+    com.baomidou.mybatisplus: INFO
+    org.apache.ibatis: INFO       # MyBatis 核心包
+    java.sql: INFO                # SQL 日志
+
+
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.rikka.raymispring.controller
+# knife4j的增强配置，不需要增强可以不配
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
