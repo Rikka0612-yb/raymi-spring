@@ -40,7 +40,7 @@ public class OwnedGameServiceImpl implements OwnedGameService {
         params.add("language", "schinese");
 
         // 2. 调用 GetOwnedGames API
-        OwnedGamesResponse response = steamApiClient.get(
+        OwnedGamesResponse response = steamApiClient.serviceGet(
                 "IPlayerService",
                 "GetOwnedGames",
                 "v1",
@@ -48,12 +48,12 @@ public class OwnedGameServiceImpl implements OwnedGameService {
                 OwnedGamesResponse.class
         );
 
-        if (response == null || response.getGames() == null || response.getGames().isEmpty()) {
+        if (response == null || response.getResponse().getGames() == null || response.getResponse().getGames().isEmpty()) {
             log.warn("No games found for steamid: {} or response is null", steamid);
             return;
         }
 
-        List<OwnedGamesResponse.GameInfo> games = response.getGames();
+        List<OwnedGamesResponse.GameInfo> games = response.getResponse().getGames();
         log.info("Fetched {} games from Steam API for steamid: {}", games.size(), steamid);
 
         // 3. 将 DTO 转换为 Entity

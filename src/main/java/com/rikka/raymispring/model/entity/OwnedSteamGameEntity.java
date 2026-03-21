@@ -1,12 +1,16 @@
 package com.rikka.raymispring.model.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 用户拥有的游戏实体类
@@ -14,7 +18,7 @@ import java.util.List;
  */
 @Data
 @Entity
-@IdClass(OwnedSteamGameId.class)
+@IdClass(OwnedSteamGameEntity.OwnedSteamGameId.class)
 @Table(name = "owned_game", schema = "STEAM")
 public class OwnedSteamGameEntity {
 
@@ -112,4 +116,33 @@ public class OwnedSteamGameEntity {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class OwnedSteamGameId implements Serializable {
+
+        /**
+         * Steam 用户 ID
+         */
+        private String steamid;
+
+        /**
+         * 游戏 App ID
+         */
+        private Integer appId;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            OwnedSteamGameId that = (OwnedSteamGameId) o;
+            return Objects.equals(steamid, that.steamid) && Objects.equals(appId, that.appId);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(steamid, appId);
+        }
+    }
 }

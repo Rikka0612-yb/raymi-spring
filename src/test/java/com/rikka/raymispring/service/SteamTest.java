@@ -3,8 +3,6 @@ package com.rikka.raymispring.service;
 import com.alibaba.fastjson.JSONObject;
 import com.rikka.raymispring.RaymiSpringApplication;
 import com.rikka.raymispring.manager.SteamApiClient;
-import com.rikka.raymispring.model.dto.steam.AppDetailsData;
-import com.rikka.raymispring.model.dto.steam.AppDetailsResponse;
 import com.rikka.raymispring.model.dto.steam.OwnedGamesResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -41,7 +39,7 @@ public class SteamTest {
 
         // 2. 调用 API（注意最后一个参数直接传你定义的实体类即可）
         // SteamApiClient 内部会自动处理 {"response": {...}} 的外壳
-        OwnedGamesResponse result = steamApiClient.get(
+        OwnedGamesResponse result = steamApiClient.serviceGet(
                 "IPlayerService",
                 "GetOwnedGames",
                 "v1",
@@ -50,8 +48,8 @@ public class SteamTest {
         );
 
 // 3. 直接获取并使用解析好的复杂对象集合
-        System.out.println("总游戏数：" + result.getGameCount());
-        for (OwnedGamesResponse.GameInfo game : result.getGames()) {
+        System.out.println("总游戏数：" + result.getResponse().getGameCount());
+        for (OwnedGamesResponse.GameInfo game : result.getResponse().getGames()) {
             System.out.println("游戏名：" + game.getName());
             System.out.println("游玩时长：" + game.getPlaytimeForever());
         }
@@ -60,7 +58,7 @@ public class SteamTest {
 
     @Test
     void test1(){
-        String response = steamApiClient.get(
+        String response = steamApiClient.serviceGet(
                 "api",
                 "appdetails",
                 "v2",
@@ -75,7 +73,7 @@ public class SteamTest {
         input.put("steamid", "76561199466251834");
 
         // 调用以 Service 结尾的接口，自动封装为 input_json
-        String response = steamApiClient.postService(
+        String response = steamApiClient.servicePost(
                 "IWishlistService", "GetWishlist", "v1", input, null, String.class
         );
     }
@@ -83,29 +81,19 @@ public class SteamTest {
     @Test
     public void testAppDetails() throws Exception {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("appids", "440");
+        params.add("appids", "1091500");
         params.add("l", "schinese");
         params.add("cc", "CN");
 
         // 重点：使用 JsonNode.class 获取带有动态 Key 的原始 JSON 树
         com.fasterxml.jackson.databind.JsonNode rootNode =
-                steamApiClient.getStoreApi("api/appdetails", params, com.fasterxml.jackson.databind.JsonNode.class);
+                steamApiClient.pathGet("api/appdetails", params, com.fasterxml.jackson.databind.JsonNode.class);
 
         // 获取动态的 appId 节点 (比如 "440")
         com.fasterxml.jackson.databind.JsonNode appNode = rootNode.get("440");
         com.fasterxml.jackson.databind.ObjectMapper objectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
 
-        if (appNode != null) {
-            // 将内部的 {"success": true, "data": {...}} 转化为我们定义好的实体类
-            AppDetailsResponse response = objectMapper.treeToValue(appNode, AppDetailsResponse.class);
 
-            if (Boolean.TRUE.equals(response.getSuccess())) {
-                AppDetailsData data = response.getData();
-                System.out.println("游戏名称: " + data.getName());
-                System.out.println("是否免费: " + data.getIsFree());
-                System.out.println("支持语言: " + data.getSupportedLanguages());
-            }
-        }
         log.info("response: {}", rootNode);
     }
 
@@ -121,7 +109,7 @@ public class SteamTest {
 
         // 2. 调用 API（注意最后一个参数直接传你定义的实体类即可）
         // SteamApiClient 内部会自动处理 {"response": {...}} 的外壳
-        JSONObject result = steamApiClient.get(
+        JSONObject result = steamApiClient.serviceGet(
                 "ISteamUserStats",
                 "GetPlayerAchievements",
                 "v1",

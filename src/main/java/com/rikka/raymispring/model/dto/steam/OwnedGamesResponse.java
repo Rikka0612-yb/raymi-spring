@@ -12,11 +12,19 @@ import java.util.List;
 @Data
 public class OwnedGamesResponse {
 
-    @JsonProperty("game_count")
-    private Integer gameCount;
+    @JsonProperty("response")
+    private GameInfoBody response;
 
-    @JsonProperty("games")
-    private List<GameInfo> games;
+
+    @Data
+    public static class GameInfoBody {
+        @JsonProperty("game_count")
+        private Integer gameCount;
+
+        @JsonProperty("games")
+        private List<GameInfo> games;
+    }
+
 
     @Data
     public static class GameInfo {
