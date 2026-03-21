@@ -1,12 +1,12 @@
 package com.rikka.raymispring.service.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.rikka.raymispring.domain.OwnedGame;
-import com.rikka.raymispring.domain.QOwnedGame;
+import com.rikka.raymispring.model.entity.OwnedSteamGameEntity;
+import com.rikka.raymispring.model.entity.QOwnedSteamGameEntity;
 import com.rikka.raymispring.repository.OwnedGameRepository;
 import com.rikka.raymispring.service.OwnedGameService;
-import com.rikka.raymispring.steam.client.SteamApiClient;
-import com.rikka.raymispring.steam.model.OwnedGamesResponse;
+import com.rikka.raymispring.manager.SteamApiClient;
+import com.rikka.raymispring.model.dto.steam.OwnedGamesResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -57,34 +57,34 @@ public class OwnedGameServiceImpl implements OwnedGameService {
         log.info("Fetched {} games from Steam API for steamid: {}", games.size(), steamid);
 
         // 3. 将 DTO 转换为 Entity
-        List<OwnedGame> ownedGames = new ArrayList<>();
+        List<OwnedSteamGameEntity> ownedSteamGameEntities = new ArrayList<>();
         for (OwnedGamesResponse.GameInfo gameInfo : games) {
-            OwnedGame ownedGame = new OwnedGame();
-            ownedGame.setSteamid(steamid);
-            ownedGame.setAppId(gameInfo.getAppId());
-            ownedGame.setName(gameInfo.getName());
-            ownedGame.setPlaytimeForever(gameInfo.getPlaytimeForever());
-            ownedGame.setImgIconUrl(gameInfo.getImgIconUrl());
-            ownedGame.setHasCommunityVisibleStats(gameInfo.getHasCommunityVisibleStats());
-            ownedGame.setRtimeLastPlayed(gameInfo.getRtimeLastPlayed());
-            ownedGame.setPlaytimeWindowsForever(gameInfo.getPlaytimeWindowsForever());
-            ownedGame.setPlaytimeMacForever(gameInfo.getPlaytimeMacForever());
-            ownedGame.setPlaytimeLinuxForever(gameInfo.getPlaytimeLinuxForever());
-            ownedGame.setPlaytimeDeckForever(gameInfo.getPlaytimeDeckForever());
-            ownedGame.setContentDescriptorIds(gameInfo.getContentDescriptorIds());
+            OwnedSteamGameEntity ownedSteamGameEntity = new OwnedSteamGameEntity();
+            ownedSteamGameEntity.setSteamid(steamid);
+            ownedSteamGameEntity.setAppId(gameInfo.getAppId());
+            ownedSteamGameEntity.setName(gameInfo.getName());
+            ownedSteamGameEntity.setPlaytimeForever(gameInfo.getPlaytimeForever());
+            ownedSteamGameEntity.setImgIconUrl(gameInfo.getImgIconUrl());
+            ownedSteamGameEntity.setHasCommunityVisibleStats(gameInfo.getHasCommunityVisibleStats());
+            ownedSteamGameEntity.setRtimeLastPlayed(gameInfo.getRtimeLastPlayed());
+            ownedSteamGameEntity.setPlaytimeWindowsForever(gameInfo.getPlaytimeWindowsForever());
+            ownedSteamGameEntity.setPlaytimeMacForever(gameInfo.getPlaytimeMacForever());
+            ownedSteamGameEntity.setPlaytimeLinuxForever(gameInfo.getPlaytimeLinuxForever());
+            ownedSteamGameEntity.setPlaytimeDeckForever(gameInfo.getPlaytimeDeckForever());
+            ownedSteamGameEntity.setContentDescriptorIds(gameInfo.getContentDescriptorIds());
             
-            ownedGames.add(ownedGame);
+            ownedSteamGameEntities.add(ownedSteamGameEntity);
         }
 
         // 4. 批量保存到数据库（JpaRepository saveAll 会根据主键自动处理插入或更新）
-        ownedGameRepository.saveAll(ownedGames);
-        log.info("Successfully saved/updated {} games into database for steamid: {}", ownedGames.size(), steamid);
+        ownedGameRepository.saveAll(ownedSteamGameEntities);
+        log.info("Successfully saved/updated {} games into database for steamid: {}", ownedSteamGameEntities.size(), steamid);
     }
 
     @Override
-    public List<OwnedGame> getMostPlayedGames(String steamid, int minPlaytime) {
+    public List<OwnedSteamGameEntity> getMostPlayedGames(String steamid, int minPlaytime) {
         // 使用生成的 Q 类
-        QOwnedGame qOwnedGame = QOwnedGame.ownedGame;
+        QOwnedSteamGameEntity qOwnedGame = QOwnedSteamGameEntity.ownedSteamGameEntity;
 
         // 使用 JPAQueryFactory 进行流式查询
         return queryFactory.selectFrom(qOwnedGame)

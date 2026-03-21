@@ -1,8 +1,9 @@
-package com.rikka.raymispring.steam.client;
+package com.rikka.raymispring.manager;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rikka.raymispring.steam.config.SteamApiProperties;
+import com.rikka.raymispring.model.dto.steam.SteamResponse;
+import com.rikka.raymispring.config.properties.SteamApiProperties;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;

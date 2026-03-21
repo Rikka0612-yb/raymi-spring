@@ -1,10 +1,9 @@
-package com.rikka.raymispring.domain;
+package com.rikka.raymispring.model.entity;
 
-import jakarta.persistence.Embeddable;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -14,7 +13,7 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OwnedGameId implements Serializable {
+public class OwnedSteamGameId implements Serializable {
 
     /**
      * Steam 用户 ID
@@ -30,7 +29,7 @@ public class OwnedGameId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OwnedGameId that = (OwnedGameId) o;
+        OwnedSteamGameId that = (OwnedSteamGameId) o;
         return Objects.equals(steamid, that.steamid) && Objects.equals(appId, that.appId);
     }
 

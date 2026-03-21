@@ -2,10 +2,10 @@ package com.rikka.raymispring.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.rikka.raymispring.RaymiSpringApplication;
-import com.rikka.raymispring.steam.client.SteamApiClient;
-import com.rikka.raymispring.steam.model.AppDetailsData;
-import com.rikka.raymispring.steam.model.AppDetailsResponse;
-import com.rikka.raymispring.steam.model.OwnedGamesResponse;
+import com.rikka.raymispring.manager.SteamApiClient;
+import com.rikka.raymispring.model.dto.steam.AppDetailsData;
+import com.rikka.raymispring.model.dto.steam.AppDetailsResponse;
+import com.rikka.raymispring.model.dto.steam.OwnedGamesResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

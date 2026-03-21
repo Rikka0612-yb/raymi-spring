@@ -1,7 +1,7 @@
-package com.rikka.raymispring.steam.client;
+package com.rikka.raymispring.interceptor;
 
-import com.rikka.raymispring.steam.config.SteamApiProperties;
-import com.rikka.raymispring.steam.exception.SteamApiException;
+import com.rikka.raymispring.config.properties.SteamApiProperties;
+import com.rikka.raymispring.exception.SteamApiException;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;

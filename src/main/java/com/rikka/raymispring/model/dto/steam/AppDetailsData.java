@@ -1,5 +1,6 @@
-package com.rikka.raymispring.steam.model;
+package com.rikka.raymispring.model.dto.steam;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -9,6 +10,7 @@ import java.util.List;
  * appdetails 接口的内部数据结构 (对应 {"success": true, "data": {...}} 里的 data 字段)
  */
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AppDetailsData {
 
     @JsonProperty("type")

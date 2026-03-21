@@ -1,7 +1,7 @@
 package com.rikka.raymispring.repository;
 
-import com.rikka.raymispring.domain.OwnedGame;
-import com.rikka.raymispring.domain.OwnedGameId;
+import com.rikka.raymispring.model.entity.OwnedSteamGameEntity;
+import com.rikka.raymispring.model.entity.OwnedSteamGameId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository;
  * 继承 QuerydslPredicateExecutor 提供 QueryDSL 复杂查询支持
  */
 @Repository
-public interface OwnedGameRepository extends JpaRepository<OwnedGame, OwnedGameId>, QuerydslPredicateExecutor<OwnedGame> {
+public interface OwnedGameRepository extends JpaRepository<OwnedSteamGameEntity, OwnedSteamGameId>, QuerydslPredicateExecutor<OwnedSteamGameEntity> {
 }

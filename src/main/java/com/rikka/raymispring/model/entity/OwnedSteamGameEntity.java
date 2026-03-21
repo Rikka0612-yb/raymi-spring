@@ -1,9 +1,10 @@
-package com.rikka.raymispring.domain;
+package com.rikka.raymispring.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -11,11 +12,11 @@ import java.util.List;
  * 用户拥有的游戏实体类
  * 对应 Steam API 中的 GameInfo 属性
  */
-@Entity
-@Table(name = "owned_game", schema = "STEAM")
 @Data
-@IdClass(OwnedGameId.class)
-public class OwnedGame {
+@Entity
+@IdClass(OwnedSteamGameId.class)
+@Table(name = "owned_game", schema = "STEAM")
+public class OwnedSteamGameEntity {
 
     /**
      * Steam 用户 ID (联合主键之一)

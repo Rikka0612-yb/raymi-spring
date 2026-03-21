@@ -1,4 +1,4 @@
-package com.rikka.raymispring.steam.model;
+package com.rikka.raymispring.model.dto.steam;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

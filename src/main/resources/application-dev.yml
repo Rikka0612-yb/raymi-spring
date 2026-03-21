@@ -69,3 +69,7 @@ steam:
   api:
     proxyHost: 127.0.0.1
     proxyPort: 7890
+
+encryption:
+  aes:
+    key: ZefCRrRl/AoyAiTbICOeu46yIwNlWkxb  # 必须是32个字符

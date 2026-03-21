@@ -1,6 +1,8 @@
-package com.rikka.raymispring.steam.config;
+package com.rikka.raymispring.config;
 
-import com.rikka.raymispring.steam.client.SteamAuthInterceptor;
+import com.rikka.raymispring.config.properties.SteamApiProperties;
+import com.rikka.raymispring.constant.CommonConstants;
+import com.rikka.raymispring.interceptor.SteamAuthInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -48,10 +50,10 @@ public class SteamRestTemplateConfig {
         // 2. 自动探测常见的本地代理端口 (Clash/V2Ray/WattToolkit)
         int[] commonPorts = {7890, 10809, 1080, 10808};
         for (int port : commonPorts) {
-            if (isLocalPortActive("127.0.0.1", port)) {
+            if (isLocalPortActive(port)) {
                 // 发现可用端口，自动返回
                 log.info("Found active proxy port: {}", port);
-                return new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", port));
+                return new Proxy(Proxy.Type.HTTP, new InetSocketAddress(CommonConstants.LOCAL_HOST, port));
             }
         }
 
@@ -61,9 +63,9 @@ public class SteamRestTemplateConfig {
     /**
      * 简单的 Socket 检测，判断本地端口是否开启
      */
-    private boolean isLocalPortActive(String host, int port) {
+    private boolean isLocalPortActive(int port) {
         try (Socket socket = new Socket()) {
-            socket.connect(new InetSocketAddress(host, port), 200); // 200ms 快速探测
+            socket.connect(new InetSocketAddress(CommonConstants.LOCAL_HOST, port), 200); // 200ms 快速探测
             return true;
         } catch (Exception e) {
             return false;

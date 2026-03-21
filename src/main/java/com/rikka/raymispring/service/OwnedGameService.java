@@ -1,6 +1,7 @@
 package com.rikka.raymispring.service;
 
-import com.rikka.raymispring.domain.OwnedGame;
+import com.rikka.raymispring.model.entity.OwnedSteamGameEntity;
+
 import java.util.List;
 
 /**
@@ -23,5 +24,5 @@ public interface OwnedGameService {
      * @param minPlaytime 最小游玩时间（分钟）
      * @return 游戏列表
      */
-    List<OwnedGame> getMostPlayedGames(String steamid, int minPlaytime);
+    List<OwnedSteamGameEntity> getMostPlayedGames(String steamid, int minPlaytime);
 }

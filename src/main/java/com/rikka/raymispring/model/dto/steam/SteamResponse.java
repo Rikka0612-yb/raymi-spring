@@ -1,4 +1,4 @@
-package com.rikka.raymispring.steam.client;
+package com.rikka.raymispring.model.dto.steam;
 
 import lombok.Data;
 
