@@ -20,6 +20,7 @@ public class SteamApiProperties {
      * 默认公共 API 域名
      */
     private String baseUrl = "https://api.steampowered.com";
+//    private String baseUrl = "https://api.steamchina.com";
 
     /**
      * 合作伙伴专属高可用 API 域名 (需要 publisher key)
@@ -31,4 +32,8 @@ public class SteamApiProperties {
      * 用于 appdetails 等接口
      */
     private String storeBaseUrl = "https://store.steampowered.com";
+
+    // 代理配置字段
+    private String proxyHost;
+    private Integer proxyPort;
 }

@@ -32,7 +32,7 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
@@ -43,7 +43,7 @@ logging:
     path: ./logs
   level:
     root: INFO
-    org.hibernate.SQL: DEBUG
+    org.hibernate.SQL: INFO
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 
@@ -64,3 +64,8 @@ knife4j:
   enable: true
   setting:
     language: zh_cn
+
+steam:
+  api:
+    proxyHost: 127.0.0.1
+    proxyPort: 7890

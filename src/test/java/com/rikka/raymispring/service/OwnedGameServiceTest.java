@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
-@ActiveProfiles({"test", "secret"})
+@ActiveProfiles({"dev", "secret"})
 @SpringBootTest(classes = RaymiSpringApplication.class)
 public class OwnedGameServiceTest {
 
@@ -28,20 +28,20 @@ public class OwnedGameServiceTest {
 
     @Test
     public void testSyncOwnedGames() {
-        // 使用一个已知的 Steam ID，此 ID 在其他测试中使用过
+//        // 使用一个已知的 Steam ID，此 ID 在其他测试中使用过
         String testSteamId = "76561199466251834";
-        
+
         // 1. 执行同步
         log.info("Starting testSyncOwnedGames...");
         ownedGameService.syncOwnedGames(testSteamId);
-        
+
         // 2. 从数据库查询并验证
         List<OwnedGame> games = ownedGameRepository.findAll();
         log.info("Total games in database after sync: {}", games.size());
-        
+
         assertNotNull(games);
         assertFalse(games.isEmpty(), "The games list should not be empty after sync");
-        
+//
         // 3. 测试 QueryDSL 方法
         int minPlaytime = 1000; // 查找游玩时间超过 1000 分钟的游戏
         List<OwnedGame> mostPlayedGames = ownedGameService.getMostPlayedGames(testSteamId, minPlaytime);
