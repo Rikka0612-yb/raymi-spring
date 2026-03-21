@@ -1,9 +1,11 @@
 package com.rikka.raymispring.service;
 
-import com.alibaba.fastjson.JSONObject;
 import com.rikka.raymispring.RaymiSpringApplication;
 import com.rikka.raymispring.manager.SteamApiClient;
 import com.rikka.raymispring.model.dto.steam.OwnedGamesResponse;
+import com.rikka.raymispring.model.dto.steam.PlayerAchievementsResponse;
+import com.rikka.raymispring.model.entity.PlayerAchievementsEntity;
+import com.rikka.raymispring.repository.PlayerAchievementsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,7 @@ import java.util.Map;
  * 2026/3/20 23:20
  */
 @Slf4j
-@ActiveProfiles({"test", "secret"})
+@ActiveProfiles({"dev", "secret"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,classes = RaymiSpringApplication.class)
 public class SteamTest {
 
@@ -97,6 +99,8 @@ public class SteamTest {
         log.info("response: {}", rootNode);
     }
 
+    @Autowired
+    private PlayerAchievementsRepository playerAchievementsRepository;
     @Test
     public void testAppDetails2() throws Exception {
         // 1. 准备参数
@@ -109,13 +113,24 @@ public class SteamTest {
 
         // 2. 调用 API（注意最后一个参数直接传你定义的实体类即可）
         // SteamApiClient 内部会自动处理 {"response": {...}} 的外壳
-        JSONObject result = steamApiClient.serviceGet(
+        PlayerAchievementsResponse result = steamApiClient.serviceGet(
                 "ISteamUserStats",
                 "GetPlayerAchievements",
                 "v1",
                 params,
-                JSONObject.class
+                PlayerAchievementsResponse.class
         );
         log.info("response: {}", result);
+        result.getPlayerStats().getAchievements().forEach(achievement -> {
+            PlayerAchievementsEntity entity =
+                    new PlayerAchievementsEntity(achievement, result.getPlayerStats().getSteamID(), 1091500);
+            playerAchievementsRepository.save(entity);
+        });
     }
+
+
+
+
+
+
 }

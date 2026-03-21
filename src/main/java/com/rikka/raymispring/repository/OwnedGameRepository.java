@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * 继承 QuerydslPredicateExecutor 提供 QueryDSL 复杂查询支持
  */
 @Repository
-public interface OwnedGameRepository extends JpaRepository<OwnedSteamGameEntity, OwnedSteamGameEntity.OwnedSteamGameId>, QuerydslPredicateExecutor<OwnedSteamGameEntity> {
+public interface OwnedGameRepository extends JpaRepository<OwnedSteamGameEntity, OwnedSteamGameEntity.PrimaryKey>, QuerydslPredicateExecutor<OwnedSteamGameEntity> {
 }

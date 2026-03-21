@@ -59,20 +59,7 @@ public class OwnedGameServiceImpl implements OwnedGameService {
         // 3. 将 DTO 转换为 Entity
         List<OwnedSteamGameEntity> ownedSteamGameEntities = new ArrayList<>();
         for (OwnedGamesResponse.GameInfo gameInfo : games) {
-            OwnedSteamGameEntity ownedSteamGameEntity = new OwnedSteamGameEntity();
-            ownedSteamGameEntity.setSteamid(steamid);
-            ownedSteamGameEntity.setAppId(gameInfo.getAppId());
-            ownedSteamGameEntity.setName(gameInfo.getName());
-            ownedSteamGameEntity.setPlaytimeForever(gameInfo.getPlaytimeForever());
-            ownedSteamGameEntity.setImgIconUrl(gameInfo.getImgIconUrl());
-            ownedSteamGameEntity.setHasCommunityVisibleStats(gameInfo.getHasCommunityVisibleStats());
-            ownedSteamGameEntity.setRtimeLastPlayed(gameInfo.getRtimeLastPlayed());
-            ownedSteamGameEntity.setPlaytimeWindowsForever(gameInfo.getPlaytimeWindowsForever());
-            ownedSteamGameEntity.setPlaytimeMacForever(gameInfo.getPlaytimeMacForever());
-            ownedSteamGameEntity.setPlaytimeLinuxForever(gameInfo.getPlaytimeLinuxForever());
-            ownedSteamGameEntity.setPlaytimeDeckForever(gameInfo.getPlaytimeDeckForever());
-            ownedSteamGameEntity.setContentDescriptorIds(gameInfo.getContentDescriptorIds());
-            
+            OwnedSteamGameEntity ownedSteamGameEntity = new OwnedSteamGameEntity(gameInfo,steamid);
             ownedSteamGameEntities.add(ownedSteamGameEntity);
         }
 

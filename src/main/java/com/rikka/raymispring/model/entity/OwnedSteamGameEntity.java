@@ -1,9 +1,8 @@
 package com.rikka.raymispring.model.entity;
 
+import com.rikka.raymispring.model.dto.steam.OwnedGamesResponse;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -16,11 +15,16 @@ import java.util.Objects;
  * 用户拥有的游戏实体类
  * 对应 Steam API 中的 GameInfo 属性
  */
+
 @Data
 @Entity
-@IdClass(OwnedSteamGameEntity.OwnedSteamGameId.class)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@IdClass(OwnedSteamGameEntity.PrimaryKey.class)
 @Table(name = "owned_game", schema = "STEAM")
-public class OwnedSteamGameEntity {
+public class OwnedSteamGameEntity{
 
     /**
      * Steam 用户 ID (联合主键之一)
@@ -118,9 +122,10 @@ public class OwnedSteamGameEntity {
     private LocalDateTime updatedAt;
 
     @Data
+    @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class OwnedSteamGameId implements Serializable {
+    public static class PrimaryKey implements Serializable {
 
         /**
          * Steam 用户 ID
@@ -136,7 +141,7 @@ public class OwnedSteamGameEntity {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            OwnedSteamGameId that = (OwnedSteamGameId) o;
+            PrimaryKey that = (PrimaryKey) o;
             return Objects.equals(steamid, that.steamid) && Objects.equals(appId, that.appId);
         }
 
@@ -144,5 +149,20 @@ public class OwnedSteamGameEntity {
         public int hashCode() {
             return Objects.hash(steamid, appId);
         }
+    }
+
+    public OwnedSteamGameEntity(OwnedGamesResponse.GameInfo gameInfo,String steamid){
+        this.setSteamid(steamid);
+        this.setAppId(gameInfo.getAppId());
+        this.setName(gameInfo.getName());
+        this.setPlaytimeForever(gameInfo.getPlaytimeForever());
+        this.setImgIconUrl(gameInfo.getImgIconUrl());
+        this.setHasCommunityVisibleStats(gameInfo.getHasCommunityVisibleStats());
+        this.setRtimeLastPlayed(gameInfo.getRtimeLastPlayed());
+        this.setPlaytimeWindowsForever(gameInfo.getPlaytimeWindowsForever());
+        this.setPlaytimeMacForever(gameInfo.getPlaytimeMacForever());
+        this.setPlaytimeLinuxForever(gameInfo.getPlaytimeLinuxForever());
+        this.setPlaytimeDeckForever(gameInfo.getPlaytimeDeckForever());
+        this.setContentDescriptorIds(gameInfo.getContentDescriptorIds());
     }
 }
