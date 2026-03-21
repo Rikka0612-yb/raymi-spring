@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,7 +12,7 @@ import java.util.List;
  * 对应 Steam API 中的 GameInfo 属性
  */
 @Entity
-@Table(name = "owned_game")
+@Table(name = "owned_game", schema = "STEAM")
 @Data
 @IdClass(OwnedGameId.class)
 public class OwnedGame {
@@ -61,25 +60,25 @@ public class OwnedGame {
      */
     @Column(name = "rtime_last_played")
     private Long rtimeLastPlayed;
-    
+
     /**
      * Windows 平台总游戏时间（分钟）
      */
     @Column(name = "playtime_windows_forever")
     private Integer playtimeWindowsForever;
-    
+
     /**
      * Mac 平台总游戏时间（分钟）
      */
     @Column(name = "playtime_mac_forever")
     private Integer playtimeMacForever;
-    
+
     /**
      * Linux 平台总游戏时间（分钟）
      */
     @Column(name = "playtime_linux_forever")
     private Integer playtimeLinuxForever;
-    
+
     /**
      * Steam Deck 平台总游戏时间（分钟）
      */
@@ -91,10 +90,11 @@ public class OwnedGame {
      * 将简单的 List<Integer> 映射到独立的集合表
      */
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "owned_game_content_descriptor", joinColumns = {
-            @JoinColumn(name = "steamid", referencedColumnName = "steamid"),
-            @JoinColumn(name = "app_id", referencedColumnName = "app_id")
-    })
+    @CollectionTable(name = "owned_game_content_descriptor", schema = "STEAM",
+            joinColumns = {
+                    @JoinColumn(name = "steamid", referencedColumnName = "steamid"),
+                    @JoinColumn(name = "app_id", referencedColumnName = "app_id")
+            })
     @Column(name = "descriptor_id")
     private List<Integer> contentDescriptorIds;
 
