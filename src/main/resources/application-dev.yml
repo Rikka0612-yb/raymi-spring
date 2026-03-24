@@ -10,6 +10,11 @@ spring:
     allow-circular-references: true
   application:
     name: rikka-raymi-server
+  ai:
+    dashscope:
+      chat:
+        options:
+          model: qwen3-max-2026-01-23
   h2:
     console:
       enabled: true       # 启用 H2 控制台
@@ -74,3 +79,5 @@ steam:
 encryption:
   aes:
     key: ZefCRrRl/AoyAiTbICOeu46yIwNlWkxb  # 必须是32个字符
+
+
