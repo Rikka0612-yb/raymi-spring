@@ -13,19 +13,19 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class BaseResponse<T> implements Serializable {
 
-    private int code;
+    private String code;
 
     private T data;
 
     private String msg;
 
-    public BaseResponse(int code, T data, String msg) {
+    public BaseResponse(String code, T data, String msg) {
         this.code = code;
         this.data = data;
         this.msg = msg;
     }
 
-    public BaseResponse(int code, T data) {
+    public BaseResponse(String code, T data) {
         this(code, data, "");
     }
 

@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * OwnedGame 实体的数据访问层
  * 继承 JpaRepository 提供基础 CRUD
@@ -12,4 +14,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface OwnedGameRepository extends JpaRepository<OwnedSteamGameEntity, OwnedSteamGameEntity.PrimaryKey>, QuerydslPredicateExecutor<OwnedSteamGameEntity> {
+    List<OwnedSteamGameEntity> findBySteamid(String steamid);
 }

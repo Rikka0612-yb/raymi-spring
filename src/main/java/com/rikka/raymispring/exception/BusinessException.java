@@ -13,9 +13,9 @@ public class BusinessException extends RuntimeException {
     /**
      * 错误码
      */
-    private final int code;
+    private final String code;
 
-    public BusinessException(int code, String message) {
+    public BusinessException(String code, String message) {
         super(message);
         this.code = code;
     }

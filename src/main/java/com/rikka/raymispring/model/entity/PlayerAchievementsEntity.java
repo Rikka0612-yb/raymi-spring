@@ -34,7 +34,7 @@ public class PlayerAchievementsEntity{
     private Integer appid;
 
     @Id
-    @Column(name = "api_name", nullable = false, length = 64)
+    @Column(name = "api_name", nullable = false)
     private String apiName;
 
     @Column(name = "achieved")
@@ -46,10 +46,10 @@ public class PlayerAchievementsEntity{
     @Column(name = "unlock_date")
     private LocalDateTime unlockDate;
 
-    @Column(name = "name", nullable = false, length = 64)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "description", nullable = false, length = 64)
+    @Column(name = "description", nullable = false)
     private String description;
 
     @CreationTimestamp

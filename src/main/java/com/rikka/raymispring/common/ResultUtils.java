@@ -33,7 +33,7 @@ public class ResultUtils {
     /**
      * 失败
      */
-    public static<T> BaseResponse<T> error(int code, String message) {
+    public static<T> BaseResponse<T> error(String code, String message) {
         return new BaseResponse<>(code, null, message);
     }
 

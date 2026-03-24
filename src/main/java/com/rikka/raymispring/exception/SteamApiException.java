@@ -9,7 +9,7 @@ public class SteamApiException extends BusinessException {
     private final Integer eresult;
 
     public SteamApiException(String message, int httpStatus, Integer eresult) {
-        super(ErrorCodeConstants.valueOf(message));
+        super(ErrorCodeConstants.FETCH_API_ERROR, message);
         this.httpStatus = httpStatus;
         this.eresult = eresult;
     }
