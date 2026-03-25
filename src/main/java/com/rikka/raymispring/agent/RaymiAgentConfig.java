@@ -2,6 +2,7 @@ package com.rikka.raymispring.agent;
 
 import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
 import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel;
+import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
 import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
 import com.rikka.raymispring.constant.SystemPromptConstant;
@@ -25,6 +26,8 @@ public class RaymiAgentConfig {
     @Value("${spring.ai.dashscope.api-key}")
     private String apiKey;
 
+    @Value("${spring.ai.dashscope.chat.options.model}")
+    private String model;
     @Resource
     private ToolRegistration toolRegistration;
     @Bean
@@ -33,6 +36,9 @@ public class RaymiAgentConfig {
                 .apiKey(apiKey)
                 .build();
         ChatModel chatModel = DashScopeChatModel.builder()
+                .defaultOptions(DashScopeChatOptions.builder()
+                        .model(model)
+                        .build())
                 .dashScopeApi(dashScopeApi)
                 .build();
         return ReactAgent.builder()

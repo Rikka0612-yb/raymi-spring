@@ -1,6 +1,6 @@
 package com.rikka.raymispring.config;
 
-import com.alibaba.cloud.ai.agent.studio.loader.AgentLoader;
+import com.rikka.raymispring.loader.AgentLoader;
 import com.alibaba.cloud.ai.graph.agent.Agent;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationContext;
