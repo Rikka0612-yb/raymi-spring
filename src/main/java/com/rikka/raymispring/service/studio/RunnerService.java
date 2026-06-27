@@ -13,31 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.rikka.raymispring.service.studio;
 
-import com.rikka.raymispring.loader.AgentLoader;
+import com.rikka.raymistudio.loader.AgentLoader;
 import com.alibaba.cloud.ai.graph.agent.Agent;
-
 import org.springframework.stereotype.Component;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /** Service for creating and caching Runner instances. */
 @Component
 public class RunnerService {
-	private static final Logger log = LoggerFactory.getLogger(RunnerService.class);
+    private static final Logger log = LoggerFactory.getLogger(RunnerService.class);
+    private final AgentLoader agentProvider;
 
-	private final AgentLoader agentProvider;
+    public RunnerService(AgentLoader agentProvider) {
+        this.agentProvider = agentProvider;
+    }
 
-	public RunnerService(
-			AgentLoader agentProvider) {
-		this.agentProvider = agentProvider;
-	}
-
-	/** Called by hot loader when agents are updated */
-	public Agent getAgent(String agentName) {
-		return agentProvider.loadAgent(agentName);
-	}
+    /** Called by hot loader when agents are updated */
+    public Agent getAgent(String agentName) {
+        return agentProvider.loadAgent(agentName);
+    }
 }

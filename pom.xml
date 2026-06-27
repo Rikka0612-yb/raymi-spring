@@ -2,119 +2,186 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>3.4.5</version>
+        <relativePath/>
     </parent>
-    <packaging>jar</packaging>
+
+    <!--
+      Standalone Spring Boot application; no parent aggregator. All non-Boot
+      dependency versions are pinned inline via <properties>.
+    -->
     <groupId>com.rikka</groupId>
     <artifactId>raymi-spring</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <name>raymi-spring</name>
-    <description>raymi-spring</description>
+    <description>Raymi Spring Boot application (studio layer provided by raymi-studio-starter)</description>
 
     <properties>
+        <!-- Versions inlined; this module is standalone (no parent aggregator). -->
         <java.version>21</java.version>
-        <jackson-bom.version>2.16.2</jackson-bom.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <spring-ai-alibaba.version>1.1.2.0</spring-ai-alibaba.version>
+        <spring-ai.version>1.1.2</spring-ai.version>
+        <spring-cloud-alibaba.version>2023.0.1.0</spring-cloud-alibaba.version>
+        <lombok.version>1.18.30</lombok.version>
+        <querydsl.version>5.1.0</querydsl.version>
+        <hutool.version>5.8.38</hutool.version>
+        <druid.version>1.2.21</druid.version>
+        <knife4j.version>4.4.0</knife4j.version>
+        <fastjson.version>1.2.83</fastjson.version>
+        <commons-codec.version>1.16.0</commons-codec.version>
+        <jetbrains-annotations.version>24.0.0</jetbrains-annotations.version>
+        <jakarta-persistence-api.version>3.1.0</jakarta-persistence-api.version>
+        <raymi-studio-starter.version>0.0.1-SNAPSHOT</raymi-studio-starter.version>
     </properties>
 
-    <dependencies>
-        <!-- Apache Commons Codec -->
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.16.0</version>
-        </dependency>
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring AI BOM (1.1.2) — provides Spring AI 1.1.2 + Jackson 2.19.x
+                 aligned with spring-ai-alibaba 1.1.2.0 -->
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
+            <!-- Spring Cloud Alibaba BOM (matches spring-ai-alibaba 1.1.2.0) -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- Spring Boot starters -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-jpa</artifactId>
-            <classifier>jakarta</classifier>
-            <version>5.1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-apt</artifactId>
-            <classifier>jakarta</classifier>
-            <version>5.1.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.30</version>
-            <optional>true</optional>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
 
+        <!-- H2 database -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+
+        <!-- QueryDSL -->
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <classifier>jakarta</classifier>
+            <version>${querydsl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <classifier>jakarta</classifier>
+            <version>${querydsl.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Hutool -->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.8.38</version>
+            <version>${hutool.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.2.1</version>
-        </dependency>
-
+        <!-- Druid (Spring Boot 3 compatible) -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-3-starter</artifactId>
-            <version>1.2.21</version> <!-- 建议使用较新稳定版本 -->
+            <version>${druid.version}</version>
         </dependency>
 
+        <!-- Knife4j (Swagger/OpenAPI docs) -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
-            <version>4.4.0</version>
+            <version>${knife4j.version}</version>
         </dependency>
 
+        <!-- Fastjson -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.83</version>
+            <version>${fastjson.version}</version>
+        </dependency>
+
+        <!-- Commons Codec -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>${commons-codec.version}</version>
+        </dependency>
+
+        <!-- Jetbrains Annotations -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${jetbrains-annotations.version}</version>
         </dependency>
 
         <!-- Spring AI Alibaba Agent Framework -->
         <dependency>
             <groupId>com.alibaba.cloud.ai</groupId>
             <artifactId>spring-ai-alibaba-agent-framework</artifactId>
-            <version>1.1.2.0</version>
+            <version>${spring-ai-alibaba.version}</version>
         </dependency>
-
-        <!-- DashScope ChatModel 支持（如果使用其他模型，请跳转 Spring AI 文档选择对应的 starter） -->
         <dependency>
             <groupId>com.alibaba.cloud.ai</groupId>
             <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
-            <version>1.1.2.0</version>
+            <version>${spring-ai-alibaba.version}</version>
         </dependency>
 
+        <!--
+            Raymi Studio Starter (provided scope):
+            - Starter's classes are NOT bundled into the application jar
+            - At runtime the starter JAR must be present on the classpath
+              (run `mvn install` in raymi-studio-starter/ first, or this dep will fail to resolve)
+            - All Studio SSE endpoints (/list-apps, /api/studio/agent/run_sse, ...)
+              and the lightweight /api/raymi/chat-stream are enabled automatically
+              via spring.factories / AutoConfiguration.imports
+            - Downstream projects can swap ThreadService / AgentLoader / GraphLoader
+              by providing @Primary @Component beans
+        -->
+        <dependency>
+            <groupId>com.rikka</groupId>
+            <artifactId>raymi-studio-starter</artifactId>
+            <version>${raymi-studio-starter.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -124,25 +191,25 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>21</source>
-                    <target>21</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <encoding>UTF-8</encoding>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>com.querydsl</groupId>
                             <artifactId>querydsl-apt</artifactId>
                             <classifier>jakarta</classifier>
-                            <version>5.1.0</version>
+                            <version>${querydsl.version}</version>
                         </path>
                         <path>
                             <groupId>jakarta.persistence</groupId>
                             <artifactId>jakarta.persistence-api</artifactId>
-                            <version>3.1.0</version>
+                            <version>${jakarta-persistence-api.version}</version>
                         </path>
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.30</version>
+                            <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
@@ -150,10 +217,8 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>3.2.0</version>
                 <configuration>
                     <mainClass>com.rikka.raymispring.RaymiSpringApplication</mainClass>
-                    <skip>false</skip>
                 </configuration>
                 <executions>
                     <execution>
@@ -163,5 +228,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

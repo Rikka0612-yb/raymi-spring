@@ -9,12 +9,13 @@ import com.rikka.raymispring.constant.SystemPromptConstant;
 import com.rikka.raymispring.interceptor.ModelPerformanceInterceptor;
 import com.rikka.raymispring.interceptor.ToolPerformanceInterceptor;
 import com.rikka.raymispring.tool.ToolRegistration;
+import jakarta.annotation.Resource;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.Resource;
+
 
 /**
  * @author 晏波

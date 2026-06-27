@@ -1,7 +1,7 @@
 package com.rikka.raymispring.config;
 
+import com.rikka.raymistudio.loader.GraphLoader;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
-import com.rikka.raymispring.loader.GraphLoader;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

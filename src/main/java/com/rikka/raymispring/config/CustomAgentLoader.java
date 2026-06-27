@@ -1,6 +1,6 @@
 package com.rikka.raymispring.config;
 
-import com.rikka.raymispring.loader.AgentLoader;
+import com.rikka.raymistudio.loader.AgentLoader;
 import com.alibaba.cloud.ai.graph.agent.Agent;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationContext;
@@ -45,9 +45,7 @@ public class CustomAgentLoader implements AgentLoader {
 
     private Map<String, String> createAliasMap() {
         Map<String, String> aliases = new HashMap<>();
-        // 将 research_agent 映射到 Raymi0.1，以兼容前端默认配置
         aliases.put("research_agent", "Raymi0.1");
-        // 可以添加更多别名映射
         return aliases;
     }
 
@@ -60,16 +58,15 @@ public class CustomAgentLoader implements AgentLoader {
     @Override
     public Agent loadAgent(String name) {
         log.info("Loading agent with name: {}", name);
-        // 首先检查别名映射
         String actualName = aliasMap.getOrDefault(name, name);
         if (!actualName.equals(name)) {
             log.info("Alias mapping found: {} -> {}", name, actualName);
         }
-        
+
         Agent agent = agentMap.get(actualName);
         if (agent == null) {
             log.error("Agent not found: {} (mapped to: {}). Available agents: {}", name, actualName, agentMap.keySet());
-            throw new NoSuchElementException("Agent not found: " + name + 
+            throw new NoSuchElementException("Agent not found: " + name +
                     (actualName.equals(name) ? "" : " (mapped from alias: " + actualName + ")"));
         }
         log.info("Successfully loaded agent: {}", actualName);
