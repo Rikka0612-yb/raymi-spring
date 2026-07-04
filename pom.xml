@@ -88,6 +88,12 @@
             <artifactId>h2</artifactId>
         </dependency>
 
+        <!-- Flyway: H2 适配内置在 flyway-core 中,无需额外 adapter -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+
         <!-- QueryDSL -->
         <dependency>
             <groupId>com.querydsl</groupId>
