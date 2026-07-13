@@ -1,0 +1,44 @@
+# Docker 环境专用配置
+# 所有值均支持通过环境变量覆盖（Spring Boot 自动绑定：SPRING_前缀全大写下划线）
+# 例如: docker run -e DATABASE_URL=jdbc:h2:mem:test ...
+# 优先级: docker run -e > .env > 这里 YAML 默认值
+
+spring:
+  datasource:
+    # 数据库路径，支持外部挂载
+    # 容器内默认写 /home/raymi/ (raymi 用户 home)，外部挂载时替换为宿主路径
+    # 示例: -e DATABASE_URL=jdbc:h2:/data/raymi_v2
+    url: ${DATABASE_URL:jdbc:h2:~/rikka_raymi_v2}
+    username: ${DATABASE_USERNAME:root}
+    password: ${DATABASE_PASSWORD:123456}
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+  ai:
+    dashscope:
+      api-key: ${SPRING_AI_DASHSCOPE_API_KEY:}
+      chat:
+        options:
+          model: ${SPRING_AI_DASHSCOPE_CHAT_OPTIONS_MODEL:qwen-plus}
+
+logging:
+  config: classpath:logback-spring.xml
+  file:
+    # 日志路径，外部挂载后替换为 /app/logs（需挂载到宿主的存储卷）
+    # 示例: -e LOG_PATH=/data/raymi_logs 或 docker-compose volumes: ./logs:/app/logs
+    path: ${LOG_PATH:/app/logs}
+  level:
+    root: INFO
+
+# Steam API 代理配置
+steam:
+  api:
+    proxy-host: ${STEAM_PROXY_HOST:127.0.0.1}
+    proxy-port: ${STEAM_PROXY_PORT:7890}
+
+# Search API
+search-api:
+  base-url: ${SEARCH_API_BASE_URL:https://www.searchapi.io/api/v1/search?engine=google}
+  api-key: ${SEARCH_API_KEY:}
+
